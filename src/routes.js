@@ -2,10 +2,12 @@ import { Router } from 'express';
 
 import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
+import AppointmentController from './app/controllers/AppointmentController';
 
 import validateUserStore from './app/validators/UserStore';
 import validateUserUpdate from './app/validators/UserUpdate';
 import validateSessionStore from './app/validators/SessionStore';
+import validateAppointmentStore from './app/validators/AppointmentStore';
 
 const routes = new Router();
 
@@ -22,6 +24,16 @@ routes.post(
   validateSessionStore,
   SessionController.store
 );
+// ===
+
+// Appointments
+routes.get('/appointments', AppointmentController.index);
+routes.post(
+  '/appointments',
+  validateAppointmentStore,
+  AppointmentController.store
+);
+routes.delete('/appointments/:id', AppointmentController.delete);
 // ===
 
 export default routes;
