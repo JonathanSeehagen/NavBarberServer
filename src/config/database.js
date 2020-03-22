@@ -1,4 +1,6 @@
 require('../bootstrap');
+// import 'dotenv';
+// require('dotenv').config();
 
 module.exports = {
   dialect: process.env.DB_DIALECT || 'postgres',
