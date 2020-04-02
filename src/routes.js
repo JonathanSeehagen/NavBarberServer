@@ -9,6 +9,8 @@ import validateUserUpdate from './app/validators/UserUpdate';
 import validateSessionStore from './app/validators/SessionStore';
 import validateAppointmentStore from './app/validators/AppointmentStore';
 
+import authMiddleware from './app/middlewares/auth';
+
 const routes = new Router();
 
 // User - Usuários
@@ -24,6 +26,8 @@ routes.post(
   validateSessionStore,
   SessionController.store
 );
+
+routes.use(authMiddleware);
 // ===
 
 // Appointments

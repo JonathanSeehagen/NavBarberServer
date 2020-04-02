@@ -9,28 +9,30 @@ import CancelAppointmentService from '../services/CancelAppointmentService';
 
 class AppointmentController {
   async index(req, res) {
-    const { page = 1 } = req.query;
+    try {
+      // const { page = 1 } = req.query;
+      const page = 1;
 
-    // const cacheKey = `user:${req.userId}:appointments:${page}`;
+      // const cacheKey = `user:${req.userId}:appointments:${page}`;
 
-    // const cached = await Cache.get(cacheKey);
+      // const cached = await Cache.get(cacheKey);
 
-    // if (cached) {
-    //  return res.json(cached);
-    // }
+      // if (cached) {
+      //  return res.json(cached);
+      // }
 
-    const appointments = await Appointment.findAll({
-      where: { user_id: req.userId, canceled_at: null },
-      order: ['date'],
-      limit: 20,
-      offset: (page - 1) * 20,
-      attributes: ['id', 'date', 'past', 'cancelable'],
-      include: [
-        {
-          model: User,
-          as: 'provider',
-          attributes: ['id', 'name'],
-          /*
+      const appointments = await Appointment.findAll({
+        where: { user_id: req.userId, canceled_at: null },
+        order: ['date'],
+        limit: 20,
+        offset: (page - 1) * 20,
+        attributes: ['id', 'date', 'past', 'cancelable'],
+        include: [
+          {
+            model: User,
+            as: 'provider',
+            attributes: ['id', 'name'],
+            /*
           include: [
             {
               model: File,
@@ -39,34 +41,44 @@ class AppointmentController {
             },
           ],
           */
-        },
-      ],
-    });
+          },
+        ],
+      });
 
-    // await Cache.set(cacheKey, appointments);
+      // await Cache.set(cacheKey, appointments);
 
-    return res.json(appointments);
+      return res.json(appointments);
+    } catch (err) {
+      return res.status(401).json(err.message);
+    }
   }
 
   async store(req, res) {
-    const { provider_id, date } = req.body;
+    try {
+      const { provider_id, date } = req.body;
 
-    const appointment = await CreateAppointmentService.run({
-      provider_id,
-      user_id: req.userId,
-      date,
-    });
-
-    return res.json(appointment);
+      const appointment = await CreateAppointmentService.run({
+        provider_id,
+        user_id: req.userId,
+        date,
+      });
+      return res.json(appointment);
+    } catch (err) {
+      return res.status(401).json(err.message);
+    }
   }
 
   async delete(req, res) {
-    const appointment = await CancelAppointmentService.run({
-      provider_id: req.params.id,
-      user_id: req.userId,
-    });
+    try {
+      const appointment = await CancelAppointmentService.run({
+        provider_id: req.params.id,
+        user_id: req.userId,
+      });
 
-    return res.json(appointment);
+      return res.json(appointment);
+    } catch (err) {
+      return res.status(401).json(err.message);
+    }
   }
 }
 
