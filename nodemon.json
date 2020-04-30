@@ -1,0 +1,6 @@
+{
+  "execMap": {
+    "js": "node --inspect=127.0.0.1:9230 -r sucrase/register"
+  },
+  "ignore": ["__tests__"]
+}
